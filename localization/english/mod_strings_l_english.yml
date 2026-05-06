@@ -1,0 +1,5 @@
+﻿l_english:
+ toggle_universal_contract_rule: "Standardize Realm Contracts"
+ toggle_universal_contract_rule_desc: "Toggle whether my default contract rules apply to my direct vassals' own vassals. When active, new sub-vassals will inherit the same high-tax and forced partition rules."
+ toggle_universal_contract_rule_tooltip: "Change the scope of my administrative laws."
+ toggle_universal_contract_rule_confirm: "Enact Contract Rules"

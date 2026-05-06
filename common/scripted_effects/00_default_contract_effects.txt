@@ -1,0 +1,27 @@
+﻿apply_default_contract_effect = {
+    # Check if the direct liege is the player
+    if = {
+        limit = { 
+            liege = { is_ai = no } 
+        }
+        
+        # Apply the contract terms using the correct CK3 syntax
+        vassal_contract_set_obligation_level = { type = feudal_government_taxes level = high_feudal_taxes }
+        vassal_contract_set_obligation_level = { type = feudal_government_levies level = low_feudal_levies }
+    }
+    # Otherwise, check for indirect vassals if the universal rule is toggled on
+    else_if = {
+        limit = {
+            liege = {
+                exists = liege
+                liege = {
+                    is_ai = no
+                    has_character_flag = universal_contract_rule_active
+                }
+            }
+        }
+        
+        vassal_contract_set_obligation_level = { type = feudal_government_taxes level = high_feudal_taxes }
+        vassal_contract_set_obligation_level = { type = feudal_government_levies level = low_feudal_levies }
+    }
+}

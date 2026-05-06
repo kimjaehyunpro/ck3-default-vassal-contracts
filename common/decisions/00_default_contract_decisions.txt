@@ -1,0 +1,9 @@
+﻿toggle_universal_contract_rule = {
+	is_shown = {
+		is_landed = yes
+	}
+	effect = {
+		custom_tooltip = "DEBUG: No more ghost spaces!"
+		add_gold = 100
+	}
+}
