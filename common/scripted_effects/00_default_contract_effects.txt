@@ -1,27 +1,64 @@
 ﻿apply_default_contract_effect = {
-    # Check if the direct liege is the player
-    if = {
-        limit = { 
-            liege = { is_ai = no } 
-        }
-        
-        # Apply the contract terms using the correct CK3 syntax
-        vassal_contract_set_obligation_level = { type = feudal_government_taxes level = high_feudal_taxes }
-        vassal_contract_set_obligation_level = { type = feudal_government_levies level = low_feudal_levies }
-    }
-    # Otherwise, check for indirect vassals if the universal rule is toggled on
-    else_if = {
-        limit = {
-            liege = {
-                exists = liege
-                liege = {
-                    is_ai = no
-                    has_character_flag = universal_contract_rule_active
-                }
-            }
-        }
-        
-        vassal_contract_set_obligation_level = { type = feudal_government_taxes level = high_feudal_taxes }
-        vassal_contract_set_obligation_level = { type = feudal_government_levies level = low_feudal_levies }
-    }
+	if = {
+		limit = {
+			scope:vassal = {
+				has_government = feudal_government
+			}
+		}
+		# Option A: The direct liege is the Player
+		if = {
+			limit = {
+				root = {
+					is_ai = no
+				}
+			}
+			scope:vassal = {
+				vassal_contract_set_obligation_level = {
+					type = feudal_government_taxes
+					level = high_feudal_taxes
+				}
+				vassal_contract_set_obligation_level = {
+					type = feudal_government_levies
+					level = low_feudal_levies
+				}
+				vassal_contract_set_obligation_level = {
+					type = special_contract
+					level = 0
+				}
+				vassal_contract_set_obligation_level = {
+					type = succession_rights
+					level = forced_partition
+				}
+			}
+		}
+		# Option B: The Player is an INDIRECT liege (top liege) AND has the toggle flag active
+		else_if = {
+			limit = {
+				root = {
+					any_liege_or_above = {
+						is_ai = no
+						has_character_flag = universal_contract_rule_active
+					}
+				}
+			}
+			scope:vassal = {
+				vassal_contract_set_obligation_level = {
+					type = feudal_government_taxes
+					level = high_feudal_taxes
+				}
+				vassal_contract_set_obligation_level = {
+					type = feudal_government_levies
+					level = low_feudal_levies
+				}
+				vassal_contract_set_obligation_level = {
+					type = special_contract
+					level = 0
+				}
+				vassal_contract_set_obligation_level = {
+					type = succession_rights
+					level = forced_partition
+				}
+			}
+		}
+	}
 }

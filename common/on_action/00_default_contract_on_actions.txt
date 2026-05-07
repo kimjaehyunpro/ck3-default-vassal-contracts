@@ -1,14 +1,6 @@
-﻿on_vassal_gained = {
-    on_actions = {
-        apply_default_contract_on_action
-    }
-}
-
-apply_default_contract_on_action = {
-    effect = {
-        # 'root' is the liege, 'scope:target' is the new vassal gaining the contract
-        scope:target = {
-            apply_default_contract_effect = yes
-        }
+﻿#
+on_vassal_gained = {
+    events = {
+        default_contract.1
     }
 }

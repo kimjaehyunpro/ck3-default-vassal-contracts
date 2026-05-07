@@ -1,0 +1,11 @@
+﻿#
+namespace = default_contract
+
+default_contract.1 = {
+    type = character_event
+    hidden = yes
+
+    immediate = {
+        apply_default_contract_effect = yes
+    }
+}
