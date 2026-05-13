@@ -1,6 +1,0 @@
-﻿#
-on_vassal_gained = {
-    events = {
-        default_contract.1
-    }
-}

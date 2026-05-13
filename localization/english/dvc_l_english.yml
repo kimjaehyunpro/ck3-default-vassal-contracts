@@ -1,0 +1,76 @@
+﻿# File: localization/english/dvc_l_english.yml
+# ENCODING: UTF-8 with BOM — mandatory, game ignores the file otherwise
+# FILENAME must end in _l_english.yml exactly
+
+l_english:
+ # ---------------------------------------------------------------
+ # Decision — all three keys are required by the game engine.
+ # Missing _tooltip or _confirm causes the pink "no localization" text.
+ # ---------------------------------------------------------------
+ dvc_open_settings_decision: "Configure Default Vassal Contracts"
+ dvc_open_settings_decision_desc: "Set default contract terms that will later be applied to my vassals."
+ dvc_open_settings_decision_tooltip: "Opens the default vassal contract configuration menu."
+ dvc_open_settings_decision_confirm: "Configure"
+
+ # ---------------------------------------------------------------
+ # dvc.001 — Main settings menu
+ # ---------------------------------------------------------------
+ dvc.001.title: "Default Vassal Contract Settings"
+ dvc.001.header: "Current configuration:\n"
+ dvc.001.tax.0: "• Tax: Exempt (Level 0)\n"
+ dvc.001.tax.1: "• Tax: Low (Level 1)\n"
+ dvc.001.tax.2: "• Tax: Normal (Level 2)\n"
+ dvc.001.tax.3: "• Tax: High (Level 3)\n"
+ dvc.001.levy.0: "• Levies: Exempt (Level 0)\n"
+ dvc.001.levy.1: "• Levies: Low (Level 1)\n"
+ dvc.001.levy.2: "• Levies: Normal (Level 2)\n"
+ dvc.001.levy.3: "• Levies: High (Level 3)\n"
+ dvc.001.fp.off: "• Forced Partition default: DISABLED\n"
+ dvc.001.fp.on: "• Forced Partition default: ENABLED\n"
+ dvc.001.indirect.off: "• Apply to indirect vassals: NO\n"
+ dvc.001.indirect.on: "• Apply to indirect vassals: YES\n"
+ dvc.001.auto.off: "• Auto-apply to new vassals: NO\n"
+ dvc.001.auto.on: "• Auto-apply to new vassals: YES\n"
+ dvc.001.opt.tax: "Set Default Tax Level"
+ dvc.001.opt.levy: "Set Default Levy Level"
+ dvc.001.opt.fp: "Configure Special Contracts (Feudal)"
+ dvc.001.opt.indirect: "Toggle: Apply to Indirect Vassals"
+ dvc.001.opt.apply: "Apply Defaults to Vassals NOW"
+ dvc.001.opt.auto: "Toggle: Auto-Apply to New Vassals"
+ dvc.001.opt.close: "Close"
+
+ # ---------------------------------------------------------------
+ # dvc.010 — Tax level selector
+ # ---------------------------------------------------------------
+ dvc.010.title: "Set Default Tax Level"
+ dvc.010.desc: "Choose the default tax obligation level to apply to feudal vassals."
+ dvc.010.exempt: "Exempt (no tax)"
+ dvc.010.low: "Low"
+ dvc.010.normal: "Normal"
+ dvc.010.high: "High"
+
+ # ---------------------------------------------------------------
+ # dvc.020 — Levy level selector
+ # ---------------------------------------------------------------
+ dvc.020.title: "Set Default Levy Level"
+ dvc.020.desc: "Choose the default levy obligation level to apply to feudal vassals."
+ dvc.020.exempt: "Exempt (no levies)"
+ dvc.020.low: "Low"
+ dvc.020.normal: "Normal"
+ dvc.020.high: "High"
+
+ # ---------------------------------------------------------------
+ # dvc.030 — Special contracts (forced partition)
+ # ---------------------------------------------------------------
+ dvc.030.title: "Special Contracts — Forced Partition"
+ dvc.030.desc: "Configure whether eligible feudal vassals will have forced partition set as default. Only applies to vassals who can have confederate partition succession."
+ dvc.030.fp.enable: "Enable Forced Partition as Default"
+ dvc.030.fp.disable: "Disable Forced Partition as Default"
+ dvc.030.back: "Back"
+
+ # ---------------------------------------------------------------
+ # dvc.099 — Apply notification
+ # ---------------------------------------------------------------
+ dvc.099.title: "Defaults Applied"
+ dvc.099.desc: "Default contract terms have been applied to your vassals. Check game.log (search for 'DVC APPLY') for a full per-vassal breakdown."
+ dvc.099.ok: "Good."

@@ -1,0 +1,230 @@
+﻿# File: events/dvc_events.txt
+# ENCODING: UTF-8 with BOM
+# LOCATION: top-level events/ folder — NOT common/events/
+
+namespace = dvc
+
+##################################################################
+# dvc.001 — Main Settings Menu
+# Scope: ROOT = player character
+##################################################################
+dvc.001 = {
+    type = character_event
+    title = dvc.001.title
+    theme = stewardship
+
+    # The desc block reads all current variable states and displays them.
+    # If any line shows the raw key (e.g. "dvc.001.tax.0") instead of text,
+    # the localization file is not loading — check encoding (UTF-8 BOM)
+    # and that the filename ends in _l_english.yml
+    desc = {
+        triggered_desc = {
+            trigger = { always = yes }
+            desc = dvc.001.header
+        }
+        triggered_desc = { trigger = { var:dvc_default_tax = 0 }     desc = dvc.001.tax.0 }
+        triggered_desc = { trigger = { var:dvc_default_tax = 1 }     desc = dvc.001.tax.1 }
+        triggered_desc = { trigger = { var:dvc_default_tax = 2 }     desc = dvc.001.tax.2 }
+        triggered_desc = { trigger = { var:dvc_default_tax = 3 }     desc = dvc.001.tax.3 }
+        triggered_desc = { trigger = { var:dvc_default_levies = 0 }  desc = dvc.001.levy.0 }
+        triggered_desc = { trigger = { var:dvc_default_levies = 1 }  desc = dvc.001.levy.1 }
+        triggered_desc = { trigger = { var:dvc_default_levies = 2 }  desc = dvc.001.levy.2 }
+        triggered_desc = { trigger = { var:dvc_default_levies = 3 }  desc = dvc.001.levy.3 }
+        triggered_desc = { trigger = { var:dvc_forced_partition = 0 } desc = dvc.001.fp.off }
+        triggered_desc = { trigger = { var:dvc_forced_partition = 1 } desc = dvc.001.fp.on }
+        triggered_desc = { trigger = { var:dvc_apply_indirect = 0 }  desc = dvc.001.indirect.off }
+        triggered_desc = { trigger = { var:dvc_apply_indirect = 1 }  desc = dvc.001.indirect.on }
+        triggered_desc = { trigger = { var:dvc_auto_apply = 0 }      desc = dvc.001.auto.off }
+        triggered_desc = { trigger = { var:dvc_auto_apply = 1 }      desc = dvc.001.auto.on }
+    }
+
+    # Set Default Tax Level
+    option = {
+        name = dvc.001.opt.tax
+        debug_log = "DVC dvc.001: Player chose SET TAX."
+        trigger_event = { id = dvc.010 }
+    }
+
+    # Set Default Levy Level
+    option = {
+        name = dvc.001.opt.levy
+        debug_log = "DVC dvc.001: Player chose SET LEVIES."
+        trigger_event = { id = dvc.020 }
+    }
+
+    # Configure Special Contracts
+    # Only shown for feudal rulers — government_is_feudal confirmed from vanilla source.
+    # If this option never appears, the government flag check is failing.
+    # Debug: remove the trigger block temporarily to confirm option appears,
+    # then add it back to confirm the flag name is correct.
+    option = {
+        name = dvc.001.opt.fp
+        trigger = { government_has_flag = government_is_feudal }
+        debug_log = "DVC dvc.001: Player chose SPECIAL CONTRACTS."
+        trigger_event = { id = dvc.030 }
+    }
+
+    # Toggle Option B: apply to indirect vassals
+    option = {
+        name = dvc.001.opt.indirect
+        if = {
+            limit = { var:dvc_apply_indirect = 1 }
+            set_variable = { name = dvc_apply_indirect value = 0 }
+            debug_log = "DVC dvc.001: DISABLED indirect vassal application."
+        }
+        else = {
+            set_variable = { name = dvc_apply_indirect value = 1 }
+            debug_log = "DVC dvc.001: ENABLED indirect vassal application."
+        }
+        trigger_event = { id = dvc.001 }
+    }
+
+    # Apply defaults to all vassals right now
+    option = {
+        name = dvc.001.opt.apply
+        debug_log = "DVC dvc.001: Player triggered APPLY NOW."
+        dvc_apply_defaults_effect = yes
+        trigger_event = { id = dvc.099 }
+    }
+
+    # Toggle auto-apply on new vassals
+    option = {
+        name = dvc.001.opt.auto
+        if = {
+            limit = { var:dvc_auto_apply = 1 }
+            set_variable = { name = dvc_auto_apply value = 0 }
+            debug_log = "DVC dvc.001: DISABLED auto-apply."
+        }
+        else = {
+            set_variable = { name = dvc_auto_apply value = 1 }
+            debug_log = "DVC dvc.001: ENABLED auto-apply."
+        }
+        trigger_event = { id = dvc.001 }
+    }
+
+    option = {
+        name = dvc.001.opt.close
+        debug_log = "DVC dvc.001: Player closed the settings menu."
+    }
+}
+
+##################################################################
+# dvc.010 — Set Tax Level
+##################################################################
+dvc.010 = {
+    type = character_event
+    title = dvc.010.title
+    desc = dvc.010.desc
+    theme = stewardship
+
+    option = {
+        name = dvc.010.exempt
+        set_variable = { name = dvc_default_tax value = 0 }
+        debug_log = "DVC dvc.010: Tax set to EXEMPT (0)."
+        trigger_event = { id = dvc.001 }
+    }
+    option = {
+        name = dvc.010.low
+        set_variable = { name = dvc_default_tax value = 1 }
+        debug_log = "DVC dvc.010: Tax set to LOW (1)."
+        trigger_event = { id = dvc.001 }
+    }
+    option = {
+        name = dvc.010.normal
+        set_variable = { name = dvc_default_tax value = 2 }
+        debug_log = "DVC dvc.010: Tax set to NORMAL (2)."
+        trigger_event = { id = dvc.001 }
+    }
+    option = {
+        name = dvc.010.high
+        set_variable = { name = dvc_default_tax value = 3 }
+        debug_log = "DVC dvc.010: Tax set to HIGH (3)."
+        trigger_event = { id = dvc.001 }
+    }
+}
+
+##################################################################
+# dvc.020 — Set Levy Level
+##################################################################
+dvc.020 = {
+    type = character_event
+    title = dvc.020.title
+    desc = dvc.020.desc
+    theme = stewardship
+
+    option = {
+        name = dvc.020.exempt
+        set_variable = { name = dvc_default_levies value = 0 }
+        debug_log = "DVC dvc.020: Levies set to EXEMPT (0)."
+        trigger_event = { id = dvc.001 }
+    }
+    option = {
+        name = dvc.020.low
+        set_variable = { name = dvc_default_levies value = 1 }
+        debug_log = "DVC dvc.020: Levies set to LOW (1)."
+        trigger_event = { id = dvc.001 }
+    }
+    option = {
+        name = dvc.020.normal
+        set_variable = { name = dvc_default_levies value = 2 }
+        debug_log = "DVC dvc.020: Levies set to NORMAL (2)."
+        trigger_event = { id = dvc.001 }
+    }
+    option = {
+        name = dvc.020.high
+        set_variable = { name = dvc_default_levies value = 3 }
+        debug_log = "DVC dvc.020: Levies set to HIGH (3)."
+        trigger_event = { id = dvc.001 }
+    }
+}
+
+##################################################################
+# dvc.030 — Configure Special Contracts (Feudal only)
+##################################################################
+dvc.030 = {
+    type = character_event
+    title = dvc.030.title
+    desc = dvc.030.desc
+    theme = stewardship
+
+    # Enable forced partition as default
+    # Only shown when currently disabled
+    option = {
+        name = dvc.030.fp.enable
+        trigger = { var:dvc_forced_partition = 0 }
+        set_variable = { name = dvc_forced_partition value = 1 }
+        debug_log = "DVC dvc.030: Forced partition ENABLED."
+        trigger_event = { id = dvc.001 }
+    }
+
+    # Disable forced partition as default
+    # Only shown when currently enabled
+    option = {
+        name = dvc.030.fp.disable
+        trigger = { var:dvc_forced_partition = 1 }
+        set_variable = { name = dvc_forced_partition value = 0 }
+        debug_log = "DVC dvc.030: Forced partition DISABLED."
+        trigger_event = { id = dvc.001 }
+    }
+
+    option = {
+        name = dvc.030.back
+        debug_log = "DVC dvc.030: Player went back."
+        trigger_event = { id = dvc.001 }
+    }
+}
+
+##################################################################
+# dvc.099 — Apply Results Notification
+##################################################################
+dvc.099 = {
+    type = character_event
+    title = dvc.099.title
+    desc = dvc.099.desc
+    theme = stewardship
+
+    option = {
+        name = dvc.099.ok
+        debug_log = "DVC dvc.099: Player acknowledged apply results."
+    }
+}

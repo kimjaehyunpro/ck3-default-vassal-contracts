@@ -1,7 +1,0 @@
-﻿l_english:
- toggle_universal_contract_rule: "Toggle Universal Vassal Contracts"
- toggle_universal_contract_rule_desc: "Enable or disable the universal application of default contracts for indirect vassals."
- toggle_universal_contract_rule_tooltip: "Toggle the rule for your realm."
- toggle_universal_contract_rule_confirm: "Toggle Rule"
- toggle_rule_disabled_tt: "Universal contract rule for indirect vassals is now DISABLED."
- toggle_rule_enabled_tt: "Universal contract rule for indirect vassals is now ENABLED."

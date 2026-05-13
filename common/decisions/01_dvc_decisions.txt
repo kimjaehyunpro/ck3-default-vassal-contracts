@@ -1,0 +1,44 @@
+﻿# File: common/decisions/01_dvc_decisions.txt
+# ENCODING: UTF-8 with BOM
+
+dvc_open_settings_decision = {
+
+    picture = {
+        reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds"
+    }
+
+    desc = dvc_open_settings_decision_desc
+
+    is_shown = {
+        is_ai = no
+        is_ruler = yes
+    }
+
+    # No is_valid block — "always = yes" renders as
+    # "always has no localization" in the tooltip, so we omit it entirely.
+
+    effect = {
+        debug_log = "DVC DECISION: Player opened DVC settings menu."
+
+        # Initialize variables only on first ever use.
+        # Safe to leave in — if variables exist this block is skipped.
+        if = {
+            limit = { NOT = { exists = var:dvc_initialized } }
+            debug_log = "DVC DECISION: First-time init — setting default variables."
+            set_variable = { name = dvc_initialized      value = 1 }
+            set_variable = { name = dvc_default_tax      value = 1 } # 0=exempt 1=low 2=normal 3=high
+            set_variable = { name = dvc_default_levies   value = 1 }
+            set_variable = { name = dvc_forced_partition value = 0 } # 0=off 1=on
+            set_variable = { name = dvc_apply_indirect   value = 0 } # Option B: 0=off 1=on
+            set_variable = { name = dvc_auto_apply       value = 0 } # Auto-apply on new vassal: 0=off 1=on
+        }
+
+        trigger_event = { id = dvc.001 }
+    }
+
+    ai_will_do = {
+        base = 0
+    }
+
+    ai_check_interval = 0
+}

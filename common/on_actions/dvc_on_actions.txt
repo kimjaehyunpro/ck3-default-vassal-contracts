@@ -1,0 +1,30 @@
+﻿# File: common/on_actions/dvc_on_actions.txt
+# ENCODING: UTF-8 with BOM
+#
+# on_vassal_gained: fires on the character who GAINED a vassal (the liege).
+# Scope ROOT = the new liege (player, if player just gained a vassal).
+#
+# WATCH ERROR.LOG: if on_vassal_gained produces errors, the on_action
+# name may differ in your game version. Check game/common/on_actions/
+# for the correct name.
+
+on_actions = {
+
+    on_vassal_gained = {
+        effect = {
+            if = {
+                limit = {
+                    is_ai = no
+                    exists = var:dvc_initialized
+                    var:dvc_auto_apply = 1
+                }
+                debug_log = "DVC ON_ACTION: on_vassal_gained fired for player — auto-apply is ON."
+                dvc_apply_defaults_effect = yes
+            }
+            else = {
+                debug_log = "DVC ON_ACTION: on_vassal_gained fired — skipped (AI, not initialized, or auto-apply OFF)."
+            }
+        }
+    }
+
+}
