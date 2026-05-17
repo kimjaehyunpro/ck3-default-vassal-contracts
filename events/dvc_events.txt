@@ -228,3 +228,48 @@ dvc.099 = {
         debug_log = "DVC dvc.099: Player acknowledged apply results."
     }
 }
+
+##################################################################
+# dvc.901 - Hidden: fires on liege when on_vassal_gained triggers
+# ROOT = liege (player), scope:vassal = the new vassal
+##################################################################
+dvc.901 = {
+    type = character_event
+    hidden = yes
+
+    trigger = {
+        is_ai = no
+        var:dvc_auto_apply = 1
+    }
+
+    immediate = {
+        debug_log = "DVC 901: vassal gained - applying defaults."
+        save_scope_as = dvc_liege
+        scope:vassal = {
+            dvc_apply_contract_to_single_vassal_effect = yes
+        }
+    }
+}
+
+##################################################################
+# dvc.902 - Hidden: fires on new title holder when on_title_gain triggers
+# ROOT = new title holder, liege = player
+##################################################################
+dvc.902 = {
+    type = character_event
+    hidden = yes
+
+    trigger = {
+        exists = liege
+        liege = {
+            is_ai = no
+            var:dvc_auto_apply = 1
+        }
+    }
+
+    immediate = {
+        debug_log = "DVC 902: title gained - applying defaults."
+        liege = { save_scope_as = dvc_liege }
+        dvc_apply_contract_to_single_vassal_effect = yes
+    }
+}

@@ -1,0 +1,11 @@
+﻿on_vassal_gained = {
+    events = {
+        dvc.901
+    }
+}
+
+on_title_gain = {
+    events = {
+        dvc.902
+    }
+}
