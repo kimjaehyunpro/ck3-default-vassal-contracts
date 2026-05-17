@@ -1,30 +1,34 @@
-﻿# File: common/on_actions/dvc_on_actions.txt
-# ENCODING: UTF-8 with BOM
-#
-# on_vassal_gained: fires on the character who GAINED a vassal (the liege).
-# Scope ROOT = the new liege (player, if player just gained a vassal).
-#
-# WATCH ERROR.LOG: if on_vassal_gained produces errors, the on_action
-# name may differ in your game version. Check game/common/on_actions/
-# for the correct name.
-
-on_actions = {
-
-    on_vassal_gained = {
-        effect = {
-            if = {
-                limit = {
-                    is_ai = no
-                    exists = var:dvc_initialized
-                    var:dvc_auto_apply = 1
-                }
-                debug_log = "DVC ON_ACTION: on_vassal_gained fired for player — auto-apply is ON."
-                dvc_apply_defaults_effect = yes
+﻿on_vassal_gained = {
+    effect = {
+        debug_log = "DVC ON_ACTION: on_vassal_gained fired."
+        if = {
+            limit = {
+                is_ai = no
+                var:dvc_auto_apply = 1
             }
-            else = {
-                debug_log = "DVC ON_ACTION: on_vassal_gained fired — skipped (AI, not initialized, or auto-apply OFF)."
+            debug_log = "DVC ON_ACTION: on_vassal_gained - auto-apply ON, applying to vassal."
+            save_scope_as = dvc_liege
+            scope:vassal = {
+                dvc_apply_contract_to_single_vassal_effect = yes
             }
         }
     }
+}
 
+on_title_gain = {
+    effect = {
+        debug_log = "DVC ON_ACTION: on_title_gain fired."
+        if = {
+            limit = {
+                exists = liege
+                liege = {
+                    is_ai = no
+                    var:dvc_auto_apply = 1
+                }
+            }
+            debug_log = "DVC ON_ACTION: on_title_gain - direct vassal of player, applying defaults."
+            liege = { save_scope_as = dvc_liege }
+            dvc_apply_contract_to_single_vassal_effect = yes
+        }
+    }
 }

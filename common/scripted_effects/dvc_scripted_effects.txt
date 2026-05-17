@@ -1,205 +1,89 @@
-﻿# File: common/scripted_effects/dvc_scripted_effects.txt
-# ENCODING: UTF-8 with BOM
-#
-# All type/level names confirmed from vanilla source files:
-#
-#   TAX:    type = feudal_government_taxes
-#           feudal_tax_exempt_level / feudal_tax_low_level
-#           feudal_tax_normal_level / feudal_tax_high_level
-#
-#   LEVIES: type = feudal_government_levies
-#           feudal_levies_exempt_level / feudal_levies_low_level
-#           feudal_levies_normal_level / feudal_levies_high_level
-#
-#   FORCED PARTITION: type = succession_rights
-#           off = succession_rights_default
-#           on  = succession_rights_forced_partition
-#           Requires: can_have_confederate_partition_succession_law_trigger
-#
-#   GOVERNMENT FLAG: government_is_feudal (confirmed from vanilla)
-
-
-##################################################################
-# dvc_apply_defaults_effect
-# Scope: ROOT = player character
-##################################################################
-dvc_apply_defaults_effect = {
-
-    debug_log = "DVC EFFECT: ===== dvc_apply_defaults_effect START ====="
-
-    # --- Direct vassals ---
-    debug_log = "DVC EFFECT: Processing DIRECT vassals..."
-    every_vassal = {
-        debug_log = "DVC EFFECT: Found a direct vassal — calling apply effect."
-        dvc_apply_contract_to_single_vassal_effect = yes
-    }
-    debug_log = "DVC EFFECT: Finished direct vassals."
-
-    # --- Option B: Indirect vassals ---
-    # WATCH ERROR.LOG: if you see "Unknown effect: every_realm_vassal" here,
-    # it means the iterator is not valid in this context in your game version.
-    # If that happens, paste the error and I will replace it with a
-    # nested every_vassal workaround.
+﻿dvc_apply_defaults_effect = {
+    debug_log = "DVC EFFECT: apply_defaults START"
+    save_scope_as = dvc_liege
     if = {
-        limit = { var:dvc_apply_indirect = 1 }
-        debug_log = "DVC EFFECT: Option B is ON — processing INDIRECT vassals..."
-        every_realm_vassal = {
-            limit = {
-                NOT = { liege = root }  # Exclude direct vassals — already processed above
-            }
-            debug_log = "DVC EFFECT: Found an indirect vassal — calling apply effect."
+        limit = { scope:dvc_liege.var:dvc_apply_indirect = 1 }
+        debug_log = "DVC EFFECT: Applying to ALL vassals (direct + indirect)..."
+        every_vassal_or_below = {
             dvc_apply_contract_to_single_vassal_effect = yes
         }
-        debug_log = "DVC EFFECT: Finished indirect vassals."
+        debug_log = "DVC EFFECT: Finished all vassals."
     }
     else = {
-        debug_log = "DVC EFFECT: Option B is OFF — skipping indirect vassals."
+        debug_log = "DVC EFFECT: Applying to DIRECT vassals only..."
+        every_vassal = {
+            dvc_apply_contract_to_single_vassal_effect = yes
+        }
+        debug_log = "DVC EFFECT: Finished direct vassals."
     }
-
-    debug_log = "DVC EFFECT: ===== dvc_apply_defaults_effect END ====="
+    debug_log = "DVC EFFECT: apply_defaults END"
 }
 
-
-##################################################################
-# dvc_apply_contract_to_single_vassal_effect
-# Scope: THIS = the vassal character
-#        ROOT = the player character (holds dvc_ variables)
-#
-# vassal_contract_set_obligation_level is always called on THIS
-# because it modifies that specific vassal's contract.
-##################################################################
 dvc_apply_contract_to_single_vassal_effect = {
-
-    debug_log = "DVC APPLY: ---- Processing one vassal ----"
-
-    # Safety gate: only proceed if this vassal has a contract that
-    # can actually be modified. Skips tributaries, admin subjects, etc.
-    # If ALL vassals are skipped here, the issue is that none qualify —
-    # check what government/contract type your vassals have.
+    debug_log = "DVC APPLY: Processing one vassal"
     if = {
         limit = { vassal_contract_has_modifiable_obligations = yes }
-
-        debug_log = "DVC APPLY: Vassal has modifiable obligations — proceeding."
-
-        # ----------------------------------------------------------------
-        # TAX
-        # type confirmed: feudal_government_taxes
-        # ROOT.var:dvc_default_tax: 0=exempt 1=low 2=normal 3=high
-        # ----------------------------------------------------------------
+        debug_log = "DVC APPLY: Has modifiable obligations - proceeding."
         if = {
-            limit = { root.var:dvc_default_tax = 0 }
+            limit = { scope:dvc_liege.var:dvc_default_tax = 0 }
             debug_log = "DVC APPLY: Setting TAX to exempt."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_taxes
-                level = feudal_tax_exempt_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_taxes level = feudal_tax_exempt_level }
         }
         else_if = {
-            limit = { root.var:dvc_default_tax = 1 }
+            limit = { scope:dvc_liege.var:dvc_default_tax = 1 }
             debug_log = "DVC APPLY: Setting TAX to low."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_taxes
-                level = feudal_tax_low_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_taxes level = feudal_tax_low_level }
         }
         else_if = {
-            limit = { root.var:dvc_default_tax = 2 }
+            limit = { scope:dvc_liege.var:dvc_default_tax = 2 }
             debug_log = "DVC APPLY: Setting TAX to normal."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_taxes
-                level = feudal_tax_normal_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_taxes level = feudal_tax_normal_level }
         }
         else_if = {
-            limit = { root.var:dvc_default_tax = 3 }
+            limit = { scope:dvc_liege.var:dvc_default_tax = 3 }
             debug_log = "DVC APPLY: Setting TAX to high."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_taxes
-                level = feudal_tax_high_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_taxes level = feudal_tax_high_level }
         }
-
-        # ----------------------------------------------------------------
-        # LEVIES
-        # type confirmed: feudal_government_levies
-        # ROOT.var:dvc_default_levies: 0=exempt 1=low 2=normal 3=high
-        # ----------------------------------------------------------------
         if = {
-            limit = { root.var:dvc_default_levies = 0 }
+            limit = { scope:dvc_liege.var:dvc_default_levies = 0 }
             debug_log = "DVC APPLY: Setting LEVIES to exempt."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_levies
-                level = feudal_levies_exempt_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_levies level = feudal_levies_exempt_level }
         }
         else_if = {
-            limit = { root.var:dvc_default_levies = 1 }
+            limit = { scope:dvc_liege.var:dvc_default_levies = 1 }
             debug_log = "DVC APPLY: Setting LEVIES to low."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_levies
-                level = feudal_levies_low_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_levies level = feudal_levies_low_level }
         }
         else_if = {
-            limit = { root.var:dvc_default_levies = 2 }
+            limit = { scope:dvc_liege.var:dvc_default_levies = 2 }
             debug_log = "DVC APPLY: Setting LEVIES to normal."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_levies
-                level = feudal_levies_normal_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_levies level = feudal_levies_normal_level }
         }
         else_if = {
-            limit = { root.var:dvc_default_levies = 3 }
+            limit = { scope:dvc_liege.var:dvc_default_levies = 3 }
             debug_log = "DVC APPLY: Setting LEVIES to high."
-            vassal_contract_set_obligation_level = {
-                type = feudal_government_levies
-                level = feudal_levies_high_level
-            }
+            vassal_contract_set_obligation_level = { type = feudal_government_levies level = feudal_levies_high_level }
         }
-
-        # ----------------------------------------------------------------
-        # FORCED PARTITION
-        # type confirmed: succession_rights
-        # off level confirmed: succession_rights_default
-        # on level confirmed:  succession_rights_forced_partition
-        #
-        # Can only be applied if:
-        #   1. The vassal has a feudal government (government_is_feudal)
-        #   2. The vassal meets the confederate partition trigger
-        #
-        # If "DVC APPLY: Skipped forced partition" always logs even for feudal
-        # vassals, the can_have_confederate_partition_succession_law_trigger
-        # is the culprit — it requires specific succession law conditions.
-        # ----------------------------------------------------------------
         if = {
             limit = {
                 government_has_flag = government_is_feudal
                 can_have_confederate_partition_succession_law_trigger = yes
             }
             if = {
-                limit = { root.var:dvc_forced_partition = 1 }
+                limit = { scope:dvc_liege.var:dvc_forced_partition = 1 }
                 debug_log = "DVC APPLY: Setting FORCED PARTITION on."
-                vassal_contract_set_obligation_level = {
-                    type = succession_rights
-                    level = succession_rights_forced_partition
-                }
+                vassal_contract_set_obligation_level = { type = succession_rights level = succession_rights_forced_partition }
             }
             else = {
-                debug_log = "DVC APPLY: Setting FORCED PARTITION off (default)."
-                vassal_contract_set_obligation_level = {
-                    type = succession_rights
-                    level = succession_rights_default
-                }
+                debug_log = "DVC APPLY: Setting FORCED PARTITION off."
+                vassal_contract_set_obligation_level = { type = succession_rights level = succession_rights_default }
             }
         }
         else = {
-            debug_log = "DVC APPLY: Skipped forced partition — vassal is not feudal or cannot have confederate partition."
+            debug_log = "DVC APPLY: Skipped forced partition - not feudal or cannot have confederate partition."
         }
-
     }
     else = {
-        # This will log for tributaries, nomads, administrative subjects, etc.
-        # It is normal for some vassals to be skipped.
-        debug_log = "DVC APPLY: Vassal has NO modifiable obligations — skipped entirely."
+        debug_log = "DVC APPLY: No modifiable obligations - skipped."
     }
 }

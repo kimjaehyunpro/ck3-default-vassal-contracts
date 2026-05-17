@@ -28,9 +28,9 @@ dvc_open_settings_decision = {
             set_variable = { name = dvc_initialized      value = 1 }
             set_variable = { name = dvc_default_tax      value = 1 } # 0=exempt 1=low 2=normal 3=high
             set_variable = { name = dvc_default_levies   value = 1 }
-            set_variable = { name = dvc_forced_partition value = 0 } # 0=off 1=on
+            set_variable = { name = dvc_forced_partition value = 1 } # 0=off 1=on
             set_variable = { name = dvc_apply_indirect   value = 0 } # Option B: 0=off 1=on
-            set_variable = { name = dvc_auto_apply       value = 0 } # Auto-apply on new vassal: 0=off 1=on
+            set_variable = { name = dvc_auto_apply       value = 1 } # Auto-apply on new vassal: 0=off 1=on
         }
 
         trigger_event = { id = dvc.001 }
