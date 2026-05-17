@@ -21,22 +21,26 @@ l_english:
  dvc.001.tax.1: "• Tax: Low (Level 1)\n"
  dvc.001.tax.2: "• Tax: Normal (Level 2)\n"
  dvc.001.tax.3: "• Tax: High (Level 3)\n"
+ dvc.001.tax.4: "• Tax: Extortionate (Level 4)\n"
  dvc.001.levy.0: "• Levies: Exempt (Level 0)\n"
  dvc.001.levy.1: "• Levies: Low (Level 1)\n"
  dvc.001.levy.2: "• Levies: Normal (Level 2)\n"
  dvc.001.levy.3: "• Levies: High (Level 3)\n"
+ dvc.001.levy.4: "• Levies: Extortionate (Level 4)\n"
  dvc.001.fp.off: "• Forced Partition default: DISABLED\n"
  dvc.001.fp.on: "• Forced Partition default: ENABLED\n"
  dvc.001.indirect.off: "• Apply to indirect vassals: NO\n"
  dvc.001.indirect.on: "• Apply to indirect vassals: YES\n"
  dvc.001.auto.off: "• Auto-apply to new vassals: NO\n"
  dvc.001.auto.on: "• Auto-apply to new vassals: YES\n"
- dvc.001.opt.tax: "Set Default Tax Level"
- dvc.001.opt.levy: "Set Default Levy Level"
- dvc.001.opt.fp: "Configure Special Contracts (Feudal)"
- dvc.001.opt.indirect: "Toggle: Apply to Indirect Vassals"
- dvc.001.opt.apply: "Apply Defaults to Vassals NOW"
- dvc.001.opt.auto: "Toggle: Auto-Apply to New Vassals"
+ dvc.001.opt.tax: "Set Default Tax"
+ dvc.001.opt.levy: "Set Default Levy"
+ dvc.001.opt.fp: "Special Contract Settings"
+ dvc.001.opt.indirect.on: "Indirect Vassals (On)"
+ dvc.001.opt.indirect.off: "Indirect Vassals (Off)"
+ dvc.001.opt.auto.on: "New Vassals (On)"
+ dvc.001.opt.auto.off: "New Vassals (Off)"
+ dvc.001.opt.apply: "Apply Defaults to Existing Vassals"
  dvc.001.opt.close: "Close"
 
  # ---------------------------------------------------------------
@@ -48,6 +52,7 @@ l_english:
  dvc.010.low: "Low"
  dvc.010.normal: "Normal"
  dvc.010.high: "High"
+ dvc.010.extortionate: "Extortionate"
 
  # ---------------------------------------------------------------
  # dvc.020 — Levy level selector
@@ -58,15 +63,80 @@ l_english:
  dvc.020.low: "Low"
  dvc.020.normal: "Normal"
  dvc.020.high: "High"
+ dvc.020.extortionate: "Extortionate"
 
  # ---------------------------------------------------------------
- # dvc.030 — Special contracts (forced partition)
+ # dvc.030 — Special contracts hub
  # ---------------------------------------------------------------
- dvc.030.title: "Special Contracts — Forced Partition"
- dvc.030.desc: "Configure whether eligible feudal vassals will have forced partition set as default. Only applies to vassals who can have confederate partition succession."
- dvc.030.fp.enable: "Enable Forced Partition as Default"
- dvc.030.fp.disable: "Disable Forced Partition as Default"
+ dvc.030.title: "Special Contracts"
+ dvc.030.header: "Current special contract settings:\n"
+
+ # Special contract type status lines
+ dvc.030.sc.none: "• Special Contract: None\n"
+ dvc.030.sc.scutage: "• Special Contract: Scutage\n"
+ dvc.030.sc.march: "• Special Contract: March\n"
+ dvc.030.sc.castellan: "• Special Contract: Castellan\n"
+ dvc.030.sc.palatinate: "• Special Contract: Palatinate\n"
+
+ # Forced partition status lines
+ dvc.030.fp.off: "• Forced Partition: DISABLED\n"
+ dvc.030.fp.on: "• Forced Partition: ENABLED\n"
+
+ # Fortification rights status lines
+ dvc.030.fort.off: "• Fortification Rights: None\n"
+ dvc.030.fort.on: "• Fortification Rights: Granted\n"
+
+ # Coinage rights status lines
+ dvc.030.coin.off: "• Coinage Rights: None\n"
+ dvc.030.coin.on: "• Coinage Rights: Granted\n"
+
+ # War declaration rights status lines
+ dvc.030.war.off: "• War Declaration Rights: Default\n"
+ dvc.030.war.on: "• War Declaration Rights: Allowed\n"
+
+ # Council rights status lines
+ dvc.030.council.off: "• Council Rights: None\n"
+ dvc.030.council.on: "• Council Rights: Guaranteed\n"
+
+ # Title revocation rights status lines
+ dvc.030.revoke.off: "• Title Revocation Rights: Default\n"
+ dvc.030.revoke.on: "• Title Revocation Rights: Protected\n"
+
+ # Option button labels
+ dvc.030.opt.sc: "Special Contract Type"
+ dvc.030.fp.enable: "Forced Partition (On)"
+ dvc.030.fp.disable: "Forced Partition (Off)"
+ dvc.030.fort.enable: "Fortification Rights (On)"
+ dvc.030.fort.disable: "Fortification Rights (Off)"
+ dvc.030.coin.enable: "Coinage Rights (On)"
+ dvc.030.coin.disable: "Coinage Rights (Off)"
+ dvc.030.war.enable: "War Declaration Rights (On)"
+ dvc.030.war.disable: "War Declaration Rights (Off)"
+ dvc.030.council.enable: "Council Rights (On)"
+ dvc.030.council.disable: "Council Rights (Off)"
+ dvc.030.revoke.enable: "Title Revocation Protection (On)"
+ dvc.030.revoke.disable: "Title Revocation Protection (Off)"
  dvc.030.back: "Back"
+
+ # ---------------------------------------------------------------
+ # dvc.031 — Special contract type selector
+ # ---------------------------------------------------------------
+ dvc.031.title: "Set Special Contract Type"
+ dvc.031.desc: "Choose a special contract type to assign to eligible feudal vassals. Tier requirements are enforced — ineligible vassals will receive None."
+ dvc.031.none: "None"
+ dvc.031.scutage: "Scutage (Duchy+)"
+ dvc.031.march: "March (Duchy+)"
+ dvc.031.castellan: "Castellan (County)"
+ dvc.031.palatinate: "Palatinate (Feudal)"
+
+ # ---------------------------------------------------------------
+ # ---------------------------------------------------------------
+ # dvc.060 - Apply confirmation (safety net)
+ # ---------------------------------------------------------------
+ dvc.060.title: "Apply Default Contracts"
+ dvc.060.desc: "This will overwrite the current vassal contracts of all targeted vassals with your configured defaults. Vassals who were granted favorable terms as rewards or penalties may have those terms erased. This action cannot be undone. Proceed?"
+ dvc.060.confirm: "Apply"
+ dvc.060.back: "Go Back"
 
  # ---------------------------------------------------------------
  # dvc.099 — Apply notification

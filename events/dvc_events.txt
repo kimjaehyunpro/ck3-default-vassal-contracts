@@ -26,12 +26,12 @@ dvc.001 = {
         triggered_desc = { trigger = { var:dvc_default_tax = 1 }     desc = dvc.001.tax.1 }
         triggered_desc = { trigger = { var:dvc_default_tax = 2 }     desc = dvc.001.tax.2 }
         triggered_desc = { trigger = { var:dvc_default_tax = 3 }     desc = dvc.001.tax.3 }
+        triggered_desc = { trigger = { var:dvc_default_tax = 4 }     desc = dvc.001.tax.4 }
         triggered_desc = { trigger = { var:dvc_default_levies = 0 }  desc = dvc.001.levy.0 }
         triggered_desc = { trigger = { var:dvc_default_levies = 1 }  desc = dvc.001.levy.1 }
         triggered_desc = { trigger = { var:dvc_default_levies = 2 }  desc = dvc.001.levy.2 }
         triggered_desc = { trigger = { var:dvc_default_levies = 3 }  desc = dvc.001.levy.3 }
-        triggered_desc = { trigger = { var:dvc_forced_partition = 0 } desc = dvc.001.fp.off }
-        triggered_desc = { trigger = { var:dvc_forced_partition = 1 } desc = dvc.001.fp.on }
+        triggered_desc = { trigger = { var:dvc_default_levies = 4 }  desc = dvc.001.levy.4 }
         triggered_desc = { trigger = { var:dvc_apply_indirect = 0 }  desc = dvc.001.indirect.off }
         triggered_desc = { trigger = { var:dvc_apply_indirect = 1 }  desc = dvc.001.indirect.on }
         triggered_desc = { trigger = { var:dvc_auto_apply = 0 }      desc = dvc.001.auto.off }
@@ -59,47 +59,47 @@ dvc.001 = {
     # then add it back to confirm the flag name is correct.
     option = {
         name = dvc.001.opt.fp
-        trigger = { government_has_flag = government_is_feudal }
         debug_log = "DVC dvc.001: Player chose SPECIAL CONTRACTS."
         trigger_event = { id = dvc.030 }
     }
 
-    # Toggle Option B: apply to indirect vassals
+    # Toggle: apply to indirect vassals
     option = {
-        name = dvc.001.opt.indirect
-        if = {
-            limit = { var:dvc_apply_indirect = 1 }
-            set_variable = { name = dvc_apply_indirect value = 0 }
-            debug_log = "DVC dvc.001: DISABLED indirect vassal application."
-        }
-        else = {
-            set_variable = { name = dvc_apply_indirect value = 1 }
-            debug_log = "DVC dvc.001: ENABLED indirect vassal application."
-        }
+        name = dvc.001.opt.indirect.on
+        trigger = { var:dvc_apply_indirect = 0 }
+        set_variable = { name = dvc_apply_indirect value = 1 }
+        debug_log = "DVC dvc.001: ENABLED indirect vassal application."
         trigger_event = { id = dvc.001 }
     }
-
-    # Apply defaults to all vassals right now
     option = {
-        name = dvc.001.opt.apply
-        debug_log = "DVC dvc.001: Player triggered APPLY NOW."
-        dvc_apply_defaults_effect = yes
-        trigger_event = { id = dvc.099 }
+        name = dvc.001.opt.indirect.off
+        trigger = { var:dvc_apply_indirect = 1 }
+        set_variable = { name = dvc_apply_indirect value = 0 }
+        debug_log = "DVC dvc.001: DISABLED indirect vassal application."
+        trigger_event = { id = dvc.001 }
     }
 
     # Toggle auto-apply on new vassals
     option = {
-        name = dvc.001.opt.auto
-        if = {
-            limit = { var:dvc_auto_apply = 1 }
-            set_variable = { name = dvc_auto_apply value = 0 }
-            debug_log = "DVC dvc.001: DISABLED auto-apply."
-        }
-        else = {
-            set_variable = { name = dvc_auto_apply value = 1 }
-            debug_log = "DVC dvc.001: ENABLED auto-apply."
-        }
+        name = dvc.001.opt.auto.on
+        trigger = { var:dvc_auto_apply = 0 }
+        set_variable = { name = dvc_auto_apply value = 1 }
+        debug_log = "DVC dvc.001: ENABLED auto-apply."
         trigger_event = { id = dvc.001 }
+    }
+    option = {
+        name = dvc.001.opt.auto.off
+        trigger = { var:dvc_auto_apply = 1 }
+        set_variable = { name = dvc_auto_apply value = 0 }
+        debug_log = "DVC dvc.001: DISABLED auto-apply."
+        trigger_event = { id = dvc.001 }
+    }
+
+    # Apply defaults — opens confirmation first
+    option = {
+        name = dvc.001.opt.apply
+        debug_log = "DVC dvc.001: Player chose APPLY - showing confirmation."
+        trigger_event = { id = dvc.060 }
     }
 
     option = {
@@ -141,6 +141,12 @@ dvc.010 = {
         debug_log = "DVC dvc.010: Tax set to HIGH (3)."
         trigger_event = { id = dvc.001 }
     }
+    option = {
+        name = dvc.010.extortionate
+        set_variable = { name = dvc_default_tax value = 4 }
+        debug_log = "DVC dvc.010: Tax set to EXTORTIONATE (4)."
+        trigger_event = { id = dvc.001 }
+    }
 }
 
 ##################################################################
@@ -176,40 +182,213 @@ dvc.020 = {
         debug_log = "DVC dvc.020: Levies set to HIGH (3)."
         trigger_event = { id = dvc.001 }
     }
+    option = {
+        name = dvc.020.extortionate
+        set_variable = { name = dvc_default_levies value = 4 }
+        debug_log = "DVC dvc.020: Levies set to EXTORTIONATE (4)."
+        trigger_event = { id = dvc.001 }
+    }
 }
 
 ##################################################################
-# dvc.030 — Configure Special Contracts (Feudal only)
+# dvc.030 — Special Contracts Hub (Feudal only)
 ##################################################################
 dvc.030 = {
     type = character_event
     title = dvc.030.title
-    desc = dvc.030.desc
     theme = stewardship
 
-    # Enable forced partition as default
-    # Only shown when currently disabled
+    desc = {
+        triggered_desc = { trigger = { always = yes }                          desc = dvc.030.header }
+        triggered_desc = { trigger = { var:dvc_default_special_contract = 0 }  desc = dvc.030.sc.none }
+        triggered_desc = { trigger = { var:dvc_default_special_contract = 1 }  desc = dvc.030.sc.scutage }
+        triggered_desc = { trigger = { var:dvc_default_special_contract = 2 }  desc = dvc.030.sc.march }
+        triggered_desc = { trigger = { var:dvc_default_special_contract = 3 }  desc = dvc.030.sc.castellan }
+        triggered_desc = { trigger = { var:dvc_default_special_contract = 4 }  desc = dvc.030.sc.palatinate }
+        triggered_desc = { trigger = { var:dvc_forced_partition = 0 }          desc = dvc.030.fp.off }
+        triggered_desc = { trigger = { var:dvc_forced_partition = 1 }          desc = dvc.030.fp.on }
+        triggered_desc = { trigger = { var:dvc_fortification_rights = 0 }      desc = dvc.030.fort.off }
+        triggered_desc = { trigger = { var:dvc_fortification_rights = 1 }      desc = dvc.030.fort.on }
+        triggered_desc = { trigger = { var:dvc_coinage_rights = 0 }            desc = dvc.030.coin.off }
+        triggered_desc = { trigger = { var:dvc_coinage_rights = 1 }            desc = dvc.030.coin.on }
+        triggered_desc = { trigger = { var:dvc_war_declaration_rights = 0 }   desc = dvc.030.war.off }
+        triggered_desc = { trigger = { var:dvc_war_declaration_rights = 1 }   desc = dvc.030.war.on }
+        triggered_desc = { trigger = { var:dvc_council_rights = 0 }           desc = dvc.030.council.off }
+        triggered_desc = { trigger = { var:dvc_council_rights = 1 }           desc = dvc.030.council.on }
+        triggered_desc = { trigger = { var:dvc_title_revocation_rights = 0 }  desc = dvc.030.revoke.off }
+        triggered_desc = { trigger = { var:dvc_title_revocation_rights = 1 }  desc = dvc.030.revoke.on }
+    }
+
+    # Set special contract type (opens sub-menu)
+    option = {
+        name = dvc.030.opt.sc
+        debug_log = "DVC dvc.030: Opening special contract type selector."
+        trigger_event = { id = dvc.031 }
+    }
+
+    # Toggle forced partition
     option = {
         name = dvc.030.fp.enable
         trigger = { var:dvc_forced_partition = 0 }
         set_variable = { name = dvc_forced_partition value = 1 }
         debug_log = "DVC dvc.030: Forced partition ENABLED."
-        trigger_event = { id = dvc.001 }
+        trigger_event = { id = dvc.030 }
     }
-
-    # Disable forced partition as default
-    # Only shown when currently enabled
     option = {
         name = dvc.030.fp.disable
         trigger = { var:dvc_forced_partition = 1 }
         set_variable = { name = dvc_forced_partition value = 0 }
         debug_log = "DVC dvc.030: Forced partition DISABLED."
-        trigger_event = { id = dvc.001 }
+        trigger_event = { id = dvc.030 }
+    }
+
+    # Toggle fortification rights
+    option = {
+        name = dvc.030.fort.enable
+        trigger = { var:dvc_fortification_rights = 0 }
+        set_variable = { name = dvc_fortification_rights value = 1 }
+        debug_log = "DVC dvc.030: Fortification rights ENABLED."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.030.fort.disable
+        trigger = { var:dvc_fortification_rights = 1 }
+        set_variable = { name = dvc_fortification_rights value = 0 }
+        debug_log = "DVC dvc.030: Fortification rights DISABLED."
+        trigger_event = { id = dvc.030 }
+    }
+
+    # Toggle coinage rights
+    option = {
+        name = dvc.030.coin.enable
+        trigger = { var:dvc_coinage_rights = 0 }
+        set_variable = { name = dvc_coinage_rights value = 1 }
+        debug_log = "DVC dvc.030: Coinage rights ENABLED."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.030.coin.disable
+        trigger = { var:dvc_coinage_rights = 1 }
+        set_variable = { name = dvc_coinage_rights value = 0 }
+        debug_log = "DVC dvc.030: Coinage rights DISABLED."
+        trigger_event = { id = dvc.030 }
+    }
+
+    # Toggle war declaration rights
+    option = {
+        name = dvc.030.war.enable
+        trigger = { var:dvc_war_declaration_rights = 0 }
+        set_variable = { name = dvc_war_declaration_rights value = 1 }
+        debug_log = "DVC dvc.030: War declaration rights ENABLED."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.030.war.disable
+        trigger = { var:dvc_war_declaration_rights = 1 }
+        set_variable = { name = dvc_war_declaration_rights value = 0 }
+        debug_log = "DVC dvc.030: War declaration rights DISABLED."
+        trigger_event = { id = dvc.030 }
+    }
+
+    # Toggle council rights
+    option = {
+        name = dvc.030.council.enable
+        trigger = { var:dvc_council_rights = 0 }
+        set_variable = { name = dvc_council_rights value = 1 }
+        debug_log = "DVC dvc.030: Council rights ENABLED."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.030.council.disable
+        trigger = { var:dvc_council_rights = 1 }
+        set_variable = { name = dvc_council_rights value = 0 }
+        debug_log = "DVC dvc.030: Council rights DISABLED."
+        trigger_event = { id = dvc.030 }
+    }
+
+    # Toggle title revocation rights
+    option = {
+        name = dvc.030.revoke.enable
+        trigger = { var:dvc_title_revocation_rights = 0 }
+        set_variable = { name = dvc_title_revocation_rights value = 1 }
+        debug_log = "DVC dvc.030: Title revocation rights ENABLED."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.030.revoke.disable
+        trigger = { var:dvc_title_revocation_rights = 1 }
+        set_variable = { name = dvc_title_revocation_rights value = 0 }
+        debug_log = "DVC dvc.030: Title revocation rights DISABLED."
+        trigger_event = { id = dvc.030 }
     }
 
     option = {
         name = dvc.030.back
         debug_log = "DVC dvc.030: Player went back."
+        trigger_event = { id = dvc.001 }
+    }
+}
+
+##################################################################
+# dvc.031 — Special Contract Type Selector
+##################################################################
+dvc.031 = {
+    type = character_event
+    title = dvc.031.title
+    desc = dvc.031.desc
+    theme = stewardship
+
+    option = {
+        name = dvc.031.none
+        set_variable = { name = dvc_default_special_contract value = 0 }
+        debug_log = "DVC dvc.031: Special contract set to NONE."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.031.scutage
+        set_variable = { name = dvc_default_special_contract value = 1 }
+        debug_log = "DVC dvc.031: Special contract set to SCUTAGE."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.031.march
+        set_variable = { name = dvc_default_special_contract value = 2 }
+        debug_log = "DVC dvc.031: Special contract set to MARCH."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.031.castellan
+        set_variable = { name = dvc_default_special_contract value = 3 }
+        debug_log = "DVC dvc.031: Special contract set to CASTELLAN."
+        trigger_event = { id = dvc.030 }
+    }
+    option = {
+        name = dvc.031.palatinate
+        set_variable = { name = dvc_default_special_contract value = 4 }
+        debug_log = "DVC dvc.031: Special contract set to PALATINATE."
+        trigger_event = { id = dvc.030 }
+    }
+}
+
+##################################################################
+# dvc.060 - Apply Confirmation (safety net)
+##################################################################
+dvc.060 = {
+    type = character_event
+    title = dvc.060.title
+    desc = dvc.060.desc
+    theme = stewardship
+
+    option = {
+        name = dvc.060.confirm
+        debug_log = "DVC dvc.060: Player confirmed APPLY."
+        dvc_apply_defaults_effect = yes
+        trigger_event = { id = dvc.099 }
+    }
+
+    option = {
+        name = dvc.060.back
+        debug_log = "DVC dvc.060: Player cancelled apply and went back."
         trigger_event = { id = dvc.001 }
     }
 }

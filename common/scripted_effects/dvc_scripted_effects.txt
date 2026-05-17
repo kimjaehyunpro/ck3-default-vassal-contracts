@@ -44,6 +44,11 @@ dvc_apply_contract_to_single_vassal_effect = {
             debug_log = "DVC APPLY: Setting TAX to high."
             vassal_contract_set_obligation_level = { type = feudal_government_taxes level = feudal_tax_high_level }
         }
+        else_if = {
+            limit = { scope:dvc_liege.var:dvc_default_tax = 4 }
+            debug_log = "DVC APPLY: Setting TAX to extortionate."
+            vassal_contract_set_obligation_level = { type = feudal_government_taxes level = feudal_tax_extortionate_level }
+        }
         if = {
             limit = { scope:dvc_liege.var:dvc_default_levies = 0 }
             debug_log = "DVC APPLY: Setting LEVIES to exempt."
@@ -64,6 +69,11 @@ dvc_apply_contract_to_single_vassal_effect = {
             debug_log = "DVC APPLY: Setting LEVIES to high."
             vassal_contract_set_obligation_level = { type = feudal_government_levies level = feudal_levies_high_level }
         }
+        else_if = {
+            limit = { scope:dvc_liege.var:dvc_default_levies = 4 }
+            debug_log = "DVC APPLY: Setting LEVIES to extortionate."
+            vassal_contract_set_obligation_level = { type = feudal_government_levies level = feudal_levies_extortionate_level }
+        }
         if = {
             limit = {
                 government_has_flag = government_is_feudal
@@ -81,6 +91,110 @@ dvc_apply_contract_to_single_vassal_effect = {
         }
         else = {
             debug_log = "DVC APPLY: Skipped forced partition - not feudal or cannot have confederate partition."
+        }
+        # ----------------------------------------------------------------
+        # SPECIAL CONTRACT (radiobutton - only one active at a time)
+        # Tier checks mirror each level's is_shown in special_contracts.txt
+        # ----------------------------------------------------------------
+        if = {
+            limit = { scope:dvc_liege.var:dvc_default_special_contract = 1 }
+            if = {
+                limit = { government_has_flag = government_is_feudal primary_title.tier >= tier_duchy }
+                debug_log = "DVC APPLY: Setting SPECIAL CONTRACT to scutage."
+                vassal_contract_set_obligation_level = { type = special_contract level = special_contract_scutage }
+            }
+            else = { vassal_contract_set_obligation_level = { type = special_contract level = special_contract_none } }
+        }
+        else_if = {
+            limit = { scope:dvc_liege.var:dvc_default_special_contract = 2 }
+            if = {
+                limit = { primary_title.tier >= tier_duchy }
+                debug_log = "DVC APPLY: Setting SPECIAL CONTRACT to march."
+                vassal_contract_set_obligation_level = { type = special_contract level = special_contract_march }
+            }
+            else = { vassal_contract_set_obligation_level = { type = special_contract level = special_contract_none } }
+        }
+        else_if = {
+            limit = { scope:dvc_liege.var:dvc_default_special_contract = 3 }
+            if = {
+                limit = { primary_title.tier = tier_county }
+                debug_log = "DVC APPLY: Setting SPECIAL CONTRACT to castellan."
+                vassal_contract_set_obligation_level = { type = special_contract level = special_contract_castellan }
+            }
+            else = { vassal_contract_set_obligation_level = { type = special_contract level = special_contract_none } }
+        }
+        else_if = {
+            limit = { scope:dvc_liege.var:dvc_default_special_contract = 4 }
+            if = {
+                limit = { government_has_flag = government_is_feudal }
+                debug_log = "DVC APPLY: Setting SPECIAL CONTRACT to palatinate."
+                vassal_contract_set_obligation_level = { type = special_contract level = special_contract_palatinate }
+            }
+            else = { vassal_contract_set_obligation_level = { type = special_contract level = special_contract_none } }
+        }
+        else = {
+            debug_log = "DVC APPLY: Setting SPECIAL CONTRACT to none."
+            vassal_contract_set_obligation_level = { type = special_contract level = special_contract_none }
+        }
+        # ----------------------------------------------------------------
+        # FORTIFICATION RIGHTS (checkbox)
+        # ----------------------------------------------------------------
+        if = {
+            limit = { scope:dvc_liege.var:dvc_fortification_rights = 1 }
+            debug_log = "DVC APPLY: Setting FORTIFICATION RIGHTS to granted."
+            vassal_contract_set_obligation_level = { type = fortification_rights level = fortification_rights_granted }
+        }
+        else = {
+            debug_log = "DVC APPLY: Setting FORTIFICATION RIGHTS to none."
+            vassal_contract_set_obligation_level = { type = fortification_rights level = fortification_rights_none }
+        }
+        # ----------------------------------------------------------------
+        # COINAGE RIGHTS (checkbox)
+        # ----------------------------------------------------------------
+        if = {
+            limit = { scope:dvc_liege.var:dvc_coinage_rights = 1 }
+            debug_log = "DVC APPLY: Setting COINAGE RIGHTS to granted."
+            vassal_contract_set_obligation_level = { type = coinage_rights level = coinage_rights_granted }
+        }
+        else = {
+            debug_log = "DVC APPLY: Setting COINAGE RIGHTS to none."
+            vassal_contract_set_obligation_level = { type = coinage_rights level = coinage_rights_none }
+        }
+        # ----------------------------------------------------------------
+        # WAR DECLARATION RIGHTS (checkbox - general)
+        # ----------------------------------------------------------------
+        if = {
+            limit = { scope:dvc_liege.var:dvc_war_declaration_rights = 1 }
+            debug_log = "DVC APPLY: Setting WAR DECLARATION RIGHTS to allowed."
+            vassal_contract_set_obligation_level = { type = war_declaration_rights level = war_declaration_rights_allowed }
+        }
+        else = {
+            debug_log = "DVC APPLY: Setting WAR DECLARATION RIGHTS to default."
+            vassal_contract_set_obligation_level = { type = war_declaration_rights level = war_declaration_rights_default }
+        }
+        # ----------------------------------------------------------------
+        # COUNCIL RIGHTS (checkbox - general)
+        # ----------------------------------------------------------------
+        if = {
+            limit = { scope:dvc_liege.var:dvc_council_rights = 1 }
+            debug_log = "DVC APPLY: Setting COUNCIL RIGHTS to guaranteed."
+            vassal_contract_set_obligation_level = { type = council_rights level = council_rights_guaranteed }
+        }
+        else = {
+            debug_log = "DVC APPLY: Setting COUNCIL RIGHTS to none."
+            vassal_contract_set_obligation_level = { type = council_rights level = council_rights_none }
+        }
+        # ----------------------------------------------------------------
+        # TITLE REVOCATION RIGHTS (checkbox - general)
+        # ----------------------------------------------------------------
+        if = {
+            limit = { scope:dvc_liege.var:dvc_title_revocation_rights = 1 }
+            debug_log = "DVC APPLY: Setting TITLE REVOCATION RIGHTS to protected."
+            vassal_contract_set_obligation_level = { type = title_revocation_rights level = title_revocation_rights_protected }
+        }
+        else = {
+            debug_log = "DVC APPLY: Setting TITLE REVOCATION RIGHTS to default."
+            vassal_contract_set_obligation_level = { type = title_revocation_rights level = title_revocation_rights_default }
         }
     }
     else = {
