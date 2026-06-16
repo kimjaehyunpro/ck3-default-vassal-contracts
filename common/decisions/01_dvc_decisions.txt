@@ -26,9 +26,9 @@ dvc_open_settings_decision = {
             limit = { NOT = { exists = var:dvc_initialized } }
             debug_log = "DVC DECISION: First-time init — setting default variables."
             set_variable = { name = dvc_initialized      value = 1 }
-            set_variable = { name = dvc_default_tax      value = 0 } # 0=exempt 1=low 2=normal 3=high
-            set_variable = { name = dvc_default_levies   value = 4 }
-            set_variable = { name = dvc_forced_partition         value = 1 } # 0=off 1=on
+            set_variable = { name = dvc_default_tax      value = 2 } # 0=exempt 1=low 2=normal 3=high
+            set_variable = { name = dvc_default_levies   value = 2 }
+            set_variable = { name = dvc_forced_partition         value = 0 } # 0=off 1=on
             set_variable = { name = dvc_default_special_contract value = 0 } # 0=none 1=scutage 2=march 3=castellan 4=palatinate
             set_variable = { name = dvc_fortification_rights     value = 0 } # 0=none 1=granted
             set_variable = { name = dvc_coinage_rights           value = 0 } # 0=none 1=granted
